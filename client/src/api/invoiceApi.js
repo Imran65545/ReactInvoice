@@ -43,3 +43,9 @@ export const getNextInvoiceNumber = async () => {
     console.error("failed to get next invoice number", err);
   }
 };
+
+
+export const deleteInvoice = async (id) =>{
+  const res = await axios.delete(`${API_URL}/delete-invoice/${id}`)
+  return res.data
+}

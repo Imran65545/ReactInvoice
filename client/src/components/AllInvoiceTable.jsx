@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllInvoice } from "../api/invoiceApi.js";
+import { getAllInvoice, deleteInvoice } from "../api/invoiceApi.js";
 import { CustomerMap } from "../utils/CustomerMapping.js";
 import { Link } from "react-router-dom";
 function AllInvoiceTable() {
@@ -21,7 +21,11 @@ function AllInvoiceTable() {
       }
     };
     fetchInvoiceList();
-  }, []);
+  }, [invoiceList]);
+
+  const handleDelete = async (id) => {
+    await deleteInvoice(id);
+  };
   return loading ? (
     <div className="text-center text-lg font-medium">Loading...</div>
   ) : (
@@ -61,15 +65,23 @@ function AllInvoiceTable() {
                 {data.items.reduce((sum, item) => sum + item.quantity, 0)}
               </td>
               <td className="text-center text-md p-1 ">{data.grandTotal}</td>
-              <td className="text-center text-md p-2 ">
+              <td className=" text-center text-md p-1 space-x-2">
                 <Link
                   to={`/${data._id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="border rounded-md px-4 py-1 cursor-pointer inline-block"
+                  className="btn font-bold capitalize border rounded-md px-4 py-2 hover:bg-black hover:text-white"
                 >
                   view
                 </Link>
+                <button
+                  onClick={() => {
+                    handleDelete(data._id);
+                  }}
+                  className="btn font-bold capitalize border rounded-md px-4 py-2 hover:bg-red-500 cursor-pointer hover:text-white"
+                >
+                  delete
+                </button>
               </td>
             </tr>
           ))

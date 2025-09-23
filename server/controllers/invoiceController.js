@@ -30,9 +30,8 @@ export const inputValidation = async (req, res) => {
       return res
         .status(409)
         .json({ message: "Invoice number already exists", exists: true });
-
     } else {
-       console.log("Invoice number is unique");
+      console.log("Invoice number is unique");
       return res.status(200).json({ exists: false });
     }
   } catch (error) {
@@ -69,5 +68,15 @@ export const getNextInvoiceNumber = async (req, res) => {
     res.json({ nextInvoiceNumber });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+};
+
+export const deleteInvoice = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const invoice = await Invoice.findByIdAndDelete(id);
+    res.status(200).json(invoice);
+  } catch (err) {
+    console.error("Error deleting invoice : ", err);
   }
 };

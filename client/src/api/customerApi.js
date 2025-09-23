@@ -19,6 +19,7 @@ export const addCustomer = async (formData) => {
     return res.data;
   } catch (err) {
     console.error("failed to create a customer", err);
+    throw err;
   }
 };
 
@@ -28,5 +29,16 @@ export const updateTransport = async (id, formData) => {
     return res.data;
   } catch (err) {
     console.error("failed to update the customer", err);
+    throw err;
+  }
+};
+
+export const deleteCustomer = async (id) => {
+  try {
+    const res = await axios.delete(`${API_URL}/delete-customer/${id}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error deleting the customer : ", err);
+    throw err;
   }
 };

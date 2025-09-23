@@ -3,7 +3,8 @@ import {
   getAllInvoice,
   getInvoiceById,
   inputValidation,
-  getNextInvoiceNumber
+  getNextInvoiceNumber,
+  deleteInvoice
 } from "../controllers/invoiceController.js";
 import express from "express";
 
@@ -15,4 +16,5 @@ router.post("/check", inputValidation);
 router.get("/", getAllInvoice);
 router.get("/getInvoiceById/:id", getInvoiceById)
 router.get("/getNextInvoiceNumber",getNextInvoiceNumber)
+router.delete("/delete-invoice/:id",deleteInvoice)
 export default router;

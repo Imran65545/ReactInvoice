@@ -46,7 +46,7 @@ export default function AddCustomerForm() {
       setTimeout(() => {
         setMessage("");
       }, 1000);
-      // console.log("Saved:", res);
+
 
       // Reset form
       setFormData({

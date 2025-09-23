@@ -35,7 +35,7 @@ export const addCustomer = async (req, res) => {
 export const updateTransport = async (req, res) => {
   try {
     const id = req.params.id;
-    const  transport  = req.body;
+    const transport = req.body;
     const customer = await CustomerDetails.findByIdAndUpdate(
       id,
       { transport },
@@ -44,6 +44,20 @@ export const updateTransport = async (req, res) => {
     res
       .status(200)
       .json({ message: "Transport updated successfully", customer });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to update transport", error: err.message });
+  }
+};
+
+export const deleteCustomer = async (req, res) => {
+  try {
+    const id = req.params.id;
+    // const  transport  = req.body;
+    console.log("customer to be deleted : ", id);
+    const data = await CustomerDetails.findByIdAndDelete(id);
+    res.status(200).json({ message: "Customer Deleted successfully", data });
   } catch (err) {
     res
       .status(500)
