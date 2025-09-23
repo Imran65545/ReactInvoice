@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import MyDocument from "./DownloadPDF/DownloadPDF";
-import { PDFViewer, PDFDownloadLink } from "@react-pdf/renderer";
+import { PDFViewer } from "@react-pdf/renderer";
+import { PDFDownload } from "../utils/PDFDownload";
 import CustomerDetails from "./CustomerDetails";
 import ProductTable from "./ProductTable";
 import Footer from "./Footer";
-import { checkForUniqueInvoiceNo } from "../api/invoiceApi";
+import { checkForUniqueInvoiceNo, createInvoice } from "../api/invoiceApi";
 const FinalInvoice = ({ invoice, showInvoice }) => {
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -18,33 +19,41 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
   const submitInvoiceToDB = async () => {
     if (isSubmitted || isSubmitting) return; // Prevent duplicate submissions
     const invoiceData = JSON.parse(JSON.stringify(invoice));
-    setIsSubmitting(true);
-    window.confirm("Submitting invoice to database...");
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
+      await createInvoice(invoiceData);
       alert("Invoice saved successfully!");
       setIsSubmitted(true);
       // Show success message using toast or custom notification
     } catch (error) {
-        alert(`Invoice number already exists. Please use a different one. Error: ${error.message}`);
-      }
-     finally {
+      alert(
+        `Invoice number already exists. Please use a different one. Error: ${error.message}`
+      );
+    } finally {
       setIsSubmitting(false);
     }
   };
   const handleAction = async (action) => {
-    const invoiceToSave = JSON.parse(JSON.stringify(invoice));
-
-    // First submit to database
-    await submitInvoiceToDB(invoiceToSave);
-
-    // If submission was successful, proceed with the action
-
+    await submitInvoiceToDB();
     if (action === "print") {
       window.print();
     }
-    // Download happens automatically through PDFDownloadLink
   };
+
+  const handleDownload = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    try {
+      await submitInvoiceToDB();
+      await PDFDownload(invoice);
+    } catch (error) {
+      console.error("Download failed:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <>
       <div className="print:hidden flex w-full justify-center gap-4 mb-2">
@@ -56,28 +65,13 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
             Print
           </button>
         )}
-        <PDFDownloadLink
-          document={<MyDocument invoice={invoice} />}
-          fileName={`${invoice.customerDetails.name}_${invoice.date}.pdf`}
+        <button
+          className="cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600"
+          onClick={handleDownload}
+          disabled={isSubmitting}
         >
-          {({ loading }) => (
-            <button
-              className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
-              onClick={() => {
-                if (isSubmitting) return;
-                submitInvoiceToDB();
-                // download will happen automatically
-              }}
-              disabled={loading || isSubmitting}
-            >
-              {loading
-                ? "Generating PDF..."
-                : isSubmitting
-                ? "Saving..."
-                : "Download"}
-            </button>
-          )}
-        </PDFDownloadLink>
+          {isSubmitting ? "Saving..." : "Download"}
+        </button>
       </div>
 
       <div className="print:hidden w-full h-full flex justify-center ">
