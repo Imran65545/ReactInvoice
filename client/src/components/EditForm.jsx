@@ -21,6 +21,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   }, []);
   const handleInvoiceChange = (e) => {
     let { name, value, type } = e.target;
+
     // Convert numeric values properly
     value = type === "number" ? Number(value) : value;
     setInvoice((prev) => ({
@@ -60,7 +61,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       };
     });
   };
-  const addItem = (e) => {
+  const handleAddItem = (e) => {
     e.preventDefault();
 
     if (invoice.items.length >= 15) {
@@ -131,6 +132,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
       };
     });
   };
+
   const calculateTotal = (updatedItems, customerDetails) => {
     const total = updatedItems.reduce((acc, item) => acc + item.amount || 0, 0);
     // console.log(updatedItems);
@@ -156,7 +158,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   return (
     <>
       <div className="w-full h-full flex flex-col  justify-between   ">
-        <form className="space-y-4" onSubmit={addItem}>
+        <form className="space-y-4" onSubmit={handleAddItem}>
           <h1 className="invoice font-extrabold text-2xl sm:text-3xl tracking-wide uppercase text-center sm:text-left">
             Tax Invoice
           </h1>

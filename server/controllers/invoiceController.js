@@ -4,11 +4,8 @@ export const createInvoice = async (req, res) => {
   console.log("Creating invoice...");
   console.log("Request body:", req.body); // <--- check what mobile is sending
   try {
-    const lastInvoice = await Invoice.findOne().sort({ invoiceNumber: -1 });
-    const newInvoiceNumber = lastInvoice ? lastInvoice.invoiceNumber + 1 : 1;
     const invoice = new Invoice({
       ...req.body.invoiceData,
-      invoiceNumber: newInvoiceNumber,
     });
     const savedInvoice = await invoice.save();
     res.status(201).json(savedInvoice);
@@ -42,7 +39,7 @@ export const inputValidation = async (req, res) => {
 
 export const getAllInvoice = async (req, res) => {
   try {
-    const allInvoice = await Invoice.find();
+    const allInvoice = await Invoice.find().sort({invoiceNumber: -1});
     res.status(200).json(allInvoice);
   } catch (error) {
     res.status(400).json({ message: error.message });

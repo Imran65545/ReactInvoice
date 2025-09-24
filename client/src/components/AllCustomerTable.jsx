@@ -20,7 +20,7 @@ function AllCustomerTable() {
       }
     };
     fecthCustomerList();
-  }, [customers]);
+  }, []);
   const handleTransportChange = async (e, customerId, transports) => {
     console.log(e.target.value);
     const selectedTransport = e.target.value;
@@ -38,7 +38,12 @@ function AllCustomerTable() {
 
   const handleDelete = async (id) => {
     const res = await deleteCustomer(id);
-    console.log("deleted customer", res);
+    // console.log("deleted customer", res);
+    const filteredCustomerList = customers.filter(
+      item => item._id !== res._id
+    );
+    // console.log(filteredCustomerList);
+    setCustomers(filteredCustomerList);
   };
   return (
     <div className="flex flex-col items-center w-full mt-6 ">

@@ -9,7 +9,6 @@ function AllInvoiceTable() {
     const fetchInvoiceList = async () => {
       try {
         const invoiceData = await getAllInvoice();
-        // console.log(invoiceData);
         setInvoiceList(await CustomerMap(invoiceData));
       } catch (err) {
         console.error(
@@ -21,10 +20,14 @@ function AllInvoiceTable() {
       }
     };
     fetchInvoiceList();
-  }, [invoiceList]);
+  }, []);
 
   const handleDelete = async (id) => {
-    await deleteInvoice(id);
+    const res = await deleteInvoice(id);
+    // console.log("deleted item",res)
+    const filteredInvoiceList =  invoiceList.filter(item => item.invoiceNumber !== res.invoiceNumber)
+    // console.log(filteredInvoiceList)
+    setInvoiceList(filteredInvoiceList)
   };
   return loading ? (
     <div className="text-center text-lg font-medium">Loading...</div>

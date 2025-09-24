@@ -5,7 +5,8 @@ import CompanyTitle from "../components/CompanyTitle";
 import { getNextInvoiceNumber } from "../api/invoiceApi.js";
 const Invoice = () => {
   const [showInvoice, setShowInvoice] = useState(false);
-   const [invoiceNumber, setInvoiceNumber] = useState(null);
+  const [invoiceNumber, setInvoiceNumber] = useState(null);
+
   const [invoice, setInvoice] = useState({
     invoiceNumber: "", // Stores the unique invoice number
     date: new Date().toISOString().split("T")[0],
@@ -13,9 +14,9 @@ const Invoice = () => {
     customerDetails: null,
     item: { name: "", quantity: "", price: "", hsn: "", amount: "" }, // Only one item at a time
     items: [],
-    igst:0,
-    sgst:0,
-    cgst:0,
+    igst: 0,
+    sgst: 0,
+    cgst: 0,
     total: 0,
     roundOff: 0,
     totalGSTValue: 0,
@@ -60,8 +61,10 @@ const Invoice = () => {
         </button>
         <button
           onClick={() => handleShowInvoice()}
-          className={`z-10 w-1/2 ${invoice.items.length === 0 ? `cursor-not-allowed`:`cursor-pointer`}  transition-all ${
-            showInvoice ? "font-semibold text-black": "text-gray-500 "
+          className={`z-10 w-1/2 ${
+            invoice.items.length === 0 ? `cursor-not-allowed` : `cursor-pointer`
+          }  transition-all ${
+            showInvoice ? "font-semibold text-black" : "text-gray-500 "
           }`}
         >
           Preview Invoice

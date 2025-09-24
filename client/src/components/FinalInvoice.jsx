@@ -21,6 +21,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
     const invoiceData = JSON.parse(JSON.stringify(invoice));
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
+      console.log("invoice to send to db",invoiceData)
       await createInvoice(invoiceData);
       alert("Invoice saved successfully!");
       setIsSubmitted(true);

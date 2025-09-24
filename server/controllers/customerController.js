@@ -57,7 +57,7 @@ export const deleteCustomer = async (req, res) => {
     // const  transport  = req.body;
     console.log("customer to be deleted : ", id);
     const data = await CustomerDetails.findByIdAndDelete(id);
-    res.status(200).json({ message: "Customer Deleted successfully", data });
+    res.status(200).json(data);
   } catch (err) {
     res
       .status(500)
