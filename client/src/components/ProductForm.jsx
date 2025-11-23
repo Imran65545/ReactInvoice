@@ -71,7 +71,7 @@ const ProductForm = ({
           name="name"
           onChange={onItemChange}
           className="flex-1 p-2 border rounded"
-          // required
+          required
         />
         <input
           type="number"
@@ -80,7 +80,7 @@ const ProductForm = ({
           name="quantity"
           onChange={onItemChange}
           className="w-full sm:w-24 p-2 border rounded"
-          // required
+          required
           min="1"
         />
         <input
@@ -100,7 +100,7 @@ const ProductForm = ({
           onChange={onItemChange}
           className="w-full sm:w-32 p-2 border rounded"
           min="1"
-          // required
+          required
           step=".01"
         />
       </div>
