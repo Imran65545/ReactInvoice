@@ -157,7 +157,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   return (
     <>
-      <div className="w-full flex flex-col  justify-between   ">
+      <div className="w-full flex flex-col  justify-between  flex-1 ">
         <form className="space-y-4" onSubmit={handleAddItem}>
           <h1 className="invoice font-extrabold text-2xl sm:text-3xl tracking-wide uppercase text-center sm:text-left">
             Tax Invoice
