@@ -1,18 +1,18 @@
-import { useEffect, useState } from "react";
+import {useState } from "react";
 import MyDocument from "./DownloadPDF/DownloadPDF";
 import { PDFViewer } from "@react-pdf/renderer";
 import { PDFDownload } from "../utils/PDFDownload";
-import CustomerDetails from "./CustomerDetails";
-import ProductTable from "./ProductTable";
-import Footer from "./Footer";
+// import CustomerDetails from "./CustomerDetails";
+// import ProductTable from "./ProductTable";
+// import Footer from "./Footer";
 import { checkForUniqueInvoiceNo, createInvoice } from "../api/invoiceApi";
-const FinalInvoice = ({ invoice, showInvoice }) => {
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+const FinalInvoice = ({ invoice }) => {
+  // const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  useEffect(() => {
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
-  }, []);
+  // useEffect(() => {
+  //   setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  // }, []);
 
   // Function to submit the invoice to the database
   // It checks for unique invoice number before submitting
@@ -21,7 +21,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
     const invoiceData = JSON.parse(JSON.stringify(invoice));
     try {
       await checkForUniqueInvoiceNo(invoiceData.invoiceNumber);
-      console.log("invoice to send to db",invoiceData)
+      console.log("invoice to send to db", invoiceData);
       await createInvoice(invoiceData);
       alert("Invoice saved successfully!");
       setIsSubmitted(true);
@@ -34,12 +34,12 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
       setIsSubmitting(false);
     }
   };
-  const handleAction = async (action) => {
-    await submitInvoiceToDB();
-    if (action === "print") {
-      window.print();
-    }
-  };
+  // const handleAction = async (action) => {
+  //   await submitInvoiceToDB();
+  //   if (action === "print") {
+  //     window.print();
+  //   }
+  // };
 
   const handleDownload = async () => {
     if (isSubmitting) return;
@@ -58,14 +58,14 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
   return (
     <>
       <div className="print:hidden flex w-full justify-center gap-4 mb-2">
-        {!isTouchDevice && (
+        {/* {!isTouchDevice && (
           <button
             className={`cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600`}
             onClick={() => handleAction("print")}
           >
             Print
           </button>
-        )}
+        )} */}
         <button
           className="cursor-pointer rounded text-white font-bold px-4 py-2 capitalize text-base sm:text-xl bg-blue-500 hover:bg-blue-600"
           onClick={handleDownload}
@@ -83,7 +83,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
           <MyDocument invoice={invoice} />
         </PDFViewer>
       </div>
-      <div className="print-container flex-col h-auto">
+      {/* <div className="print-container flex-col h-auto">
         <div className="invoiceContainer flex flex-col w-full h-full mx-auto">
           <div className="headerContainer">
             <h1 className="invoice font-extrabold text-3xl tracking-wide uppercase">
@@ -110,7 +110,7 @@ const FinalInvoice = ({ invoice, showInvoice }) => {
         <div className="footerContainer mt-4">
           <Footer />
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

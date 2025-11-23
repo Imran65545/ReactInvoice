@@ -64,10 +64,10 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   const handleAddItem = (e) => {
     e.preventDefault();
 
-    if (invoice.items.length >= 15) {
-      alert("You can only add up to 15 items.");
-      return;
-    }
+    // if (invoice.items.length >= 15) {
+    //   alert("You can only add up to 15 items.");
+    //   return;
+    // }
     setInvoice((prev) => {
       // Ensure the item's total is calculated before adding
       const newItem = {
@@ -157,7 +157,7 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   };
   return (
     <>
-      <div className="w-full h-full flex flex-col  justify-between   ">
+      <div className="w-full flex flex-col  justify-between   ">
         <form className="space-y-4" onSubmit={handleAddItem}>
           <h1 className="invoice font-extrabold text-2xl sm:text-3xl tracking-wide uppercase text-center sm:text-left">
             Tax Invoice

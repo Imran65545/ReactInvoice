@@ -3,10 +3,10 @@ import { Document, Text, Page, View } from "@react-pdf/renderer";
 import styles from "./Styles.js";
 
 export default function MyDocument({ invoice }) {
-  console.log(invoice)
+  console.log(invoice);
   return (
     <Document>
-      <Page size="A4" style={styles.page}>
+      <Page size="A4" style={styles.page} wrap>
         <View
           className="flex flex-col justify-between h-full "
           style={styles.invoiceContainer}
@@ -74,9 +74,9 @@ export default function MyDocument({ invoice }) {
               </View>
             </View>
             {/* Product Table */}
-            <View style={styles.table}>
+            <View style={styles.table} wrap>
               {/* Header */}
-              <View style={styles.tableRow}>
+              <View style={styles.tableRow} fixed break>
                 <View style={[styles.tableCol]}>
                   <Text style={[styles.tableHeader, {}]}>Sr. No.</Text>
                 </View>
@@ -97,32 +97,34 @@ export default function MyDocument({ invoice }) {
                 </View>
               </View>
               {/* Rows */}
-              {invoice.items.map((item, index) => (
-                <View style={styles.tableRow} key={index}>
-                  <View style={[styles.tableCol, { width: "25%" }]}>
-                    <Text style={styles.tableCell}>{index + 1}</Text>
+              {invoice.items.map((item, index) => {
+                return (
+                  <View style={styles.tableRow} key={index} wrap={false}>
+                    <View style={[styles.tableCol, { width: "25%" }]}>
+                      <Text style={styles.tableCell}>{index + 1}</Text>
+                    </View>
+                    <View style={[styles.tableCol, { width: "25%" }]}>
+                      <Text style={styles.tableCell}>{item.name}</Text>
+                    </View>
+                    <View style={[styles.tableCol, { width: "25%" }]}>
+                      <Text style={styles.tableCell}>{item.hsn}</Text>
+                    </View>
+                    <View style={[styles.tableCol, { width: "25%" }]}>
+                      <Text style={styles.tableCell}>{item.quantity}</Text>
+                    </View>
+                    <View style={[styles.tableCol, { width: "25%" }]}>
+                      <Text style={styles.tableCell}>{item.price}</Text>
+                    </View>
+                    <View style={[styles.tableCol, { width: "25%" }]}>
+                      <Text style={styles.tableCell}>
+                        {(item.quantity * item.price).toFixed(2)}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={[styles.tableCol, { width: "25%" }]}>
-                    <Text style={styles.tableCell}>{item.name}</Text>
-                  </View>
-                  <View style={[styles.tableCol, { width: "25%" }]}>
-                    <Text style={styles.tableCell}>{item.hsn}</Text>
-                  </View>
-                  <View style={[styles.tableCol, { width: "25%" }]}>
-                    <Text style={styles.tableCell}>{item.quantity}</Text>
-                  </View>
-                  <View style={[styles.tableCol, { width: "25%" }]}>
-                    <Text style={styles.tableCell}>{item.price}</Text>
-                  </View>
-                  <View style={[styles.tableCol, { width: "25%" }]}>
-                    <Text style={styles.tableCell}>
-                      {(item.quantity * item.price).toFixed(2)}
-                    </Text>
-                  </View>
-                </View>
-              ))}
+                );
+              })}
               {/* Simulated rowspan and colspan in last row */}
-              <View style={styles.tableRow}>
+              <View style={styles.tableRow} fixed break wrap={false}>
                 <View
                   style={[
                     styles.tableCol,
@@ -151,7 +153,11 @@ export default function MyDocument({ invoice }) {
                 </View>
 
                 {/* Normal last cell */}
-                <View style={[styles.tableCol, { width: "25%" }]}>
+                <View
+                  style={[styles.tableCol, { width: "25%" }]}
+
+
+                >
                   <Text
                     style={[
                       styles.tableCell,
@@ -333,19 +339,20 @@ export default function MyDocument({ invoice }) {
                   </Text>
                   <Text style={[styles.tableCell, { fontWeight: "bold" }]}>
                     {" "}
-                    {(invoice.grandTotal).toFixed(2)}
+                    {invoice.grandTotal.toFixed(2)}
                   </Text>
                 </View>
               </View>
             </View>
           </View>
-          <View style={styles.footerContainer}>
+          <View style={styles.footerContainer}  wrap={false}>
             <View
               style={{
                 width: "100%",
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
+                marginTop: 50
               }}
             >
               <View
@@ -369,7 +376,6 @@ export default function MyDocument({ invoice }) {
                       2.
                     </Text>
                     <Text style={styles.text}>
-
                       We are not responsible for breakage and/or shortage of
                       goods after delivery
                     </Text>
@@ -392,6 +398,7 @@ export default function MyDocument({ invoice }) {
               </View>
             </View>
             <View
+
               style={{
                 display: "flex",
                 flexDirection: "row",

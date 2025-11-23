@@ -42,7 +42,7 @@ const Invoice = () => {
   },[invoiceNumber]);
 
   return (
-    <div className="w-full px-4 py-2 h-full flex flex-col overflow-auto sm:px-10 ">
+    <div className="w-full px-4 py-2  flex flex-col justify-between overflow-auto sm:px-10 ">
       <CompanyTitle />
       {/* Switch Container */}
       <div className="print:hidden relative w-full max-w-md mx-auto flex flex-row rounded-xl shadow-md mt-4 mb-4">

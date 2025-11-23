@@ -1,6 +1,6 @@
 function Footer() {
   return (
-    <div className="footerContainer w-full mt-5 flex flex-col items-center ">
+    <div className="footerContainer w-full my-5 flex flex-col items-center ">
       <div className="w-full flex flex-col md:flex-row justify-between mb-5 gap-4">
         <div className="termsAndConditionContainer w-full md:w-1/2 text-center md:text-left">
           <h1 className="text-xl font-bold">Terms and Conditions:</h1>

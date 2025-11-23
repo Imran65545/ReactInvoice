@@ -11,8 +11,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     // justifyContent: "space-between",
-    height: "100%",
-    width: "100%",
+    // height: "100%",
   },
   headerContainer: {
     display: "flex",
@@ -68,7 +67,7 @@ const styles = StyleSheet.create({
 
   table: {
     display: "table",
-    width: "auto",
+    width: "100%", // full width
     marginTop:10,
     // borderCollapse: "collapse",
     borderStyle: "solid",
@@ -102,14 +101,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#000",
     textTransform: "capitalize"
   },
+
   footerContainer:{
     width: "100%",
     display: "flex",
-    flex: 1,
+    flex: 1, // take up remaining space
     flexDirection: "column",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 20,
+
   },
   signatureContainer:{
     display: "flex",

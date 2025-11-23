@@ -68,7 +68,7 @@ function AllInvoiceTable() {
                 {data.items.reduce((sum, item) => sum + item.quantity, 0)}
               </td>
               <td className="text-center text-md p-1 ">{data.grandTotal}</td>
-              <td className=" text-center text-md p-1 space-x-2">
+              <td className=" text-center text-md p-1 gap-2 flex flex-col sm:flex-row justify-center items-center">
                 <Link
                   to={`/${data._id}`}
                   target="_blank"
