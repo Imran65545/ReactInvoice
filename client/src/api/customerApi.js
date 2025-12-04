@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = import.meta.env.VITE_CUSTOMER_URL;
+const API_URL = "https://reactinvoice.onrender.com/api/customers";
 
 export const getAllCustomers = async () => {
   const res = await axios.get(API_URL);
