@@ -1,4 +1,11 @@
 import Invoice from "../models/InvoiceModel.js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+
 
 export const createInvoice = async (req, res) => {
   console.log("Creating invoice...");
@@ -39,7 +46,7 @@ export const inputValidation = async (req, res) => {
 
 export const getAllInvoice = async (req, res) => {
   try {
-    const allInvoice = await Invoice.find().sort({invoiceNumber: -1});
+    const allInvoice = await Invoice.find().sort({ invoiceNumber: -1 });
     res.status(200).json(allInvoice);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -75,5 +82,72 @@ export const deleteInvoice = async (req, res) => {
     res.status(200).json(invoice);
   } catch (err) {
     console.error("Error deleting invoice : ", err);
+  }
+};
+
+export const extractInvoiceDetails = async (req, res) => {
+  try {
+    console.log("Extracting invoice details...");
+    if (!process.env.GEMINI_API_KEY) {
+      console.error("GEMINI_API_KEY is missing in environment variables");
+      return res.status(500).json({ message: "Server configuration error: Missing API Key" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No image file uploaded" });
+    }
+
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    const imagePart = {
+      inlineData: {
+        data: req.file.buffer.toString("base64"),
+        mimeType: req.file.mimetype,
+      },
+    };
+
+    console.log(`File received: ${req.file.originalname}, Size: ${req.file.size}, Mime: ${req.file.mimetype}`);
+    console.log("Sending request to Gemini...");
+
+    const prompt = `
+      Extract the following details from this invoice image and return them in a strict JSON format.
+      Do not include markdown formatting (like \`\`\`json).
+      
+      Fields to extract:
+      - invoiceNumber (string)
+      - date (YYYY-MM-DD format)
+      - customerName (string)
+      - customerDetails (object with name, address, gst, etc.)
+      - items (array of objects with name, quantity, price, hsn, amount)
+      
+      If a field is not found, use null or empty string.
+      Ensure numeric values are numbers, not strings.
+    `;
+
+    const result = await model.generateContent([prompt, imagePart]);
+    const response = await result.response;
+    console.log("Gemini response received.");
+
+    const text = response.text();
+    console.log("Raw Gemini text:", text);
+
+    // Clean up the response if it contains markdown code blocks
+    const cleanText = text.replace(/```json/g, "").replace(/```/g, "").trim();
+
+    try {
+      const data = JSON.parse(cleanText);
+      res.json(data);
+    } catch (parseError) {
+      console.error("Failed to parse Gemini response:", text);
+      res.status(500).json({ message: "Failed to parse extracted data", raw: text });
+    }
+
+  } catch (error) {
+    console.error("Error extracting invoice details:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+      stack: error.stack
+    });
   }
 };

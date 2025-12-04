@@ -55,11 +55,13 @@ const ProductForm = ({
           required
         >
           <option value="">Select Company Name</option>
-          {customers.map((customer, index) => (
-            <option key={index} value={customer.name}>
-              {customer.name}
-            </option>
-          ))}
+          {Array.isArray(customers) &&
+            customers.map((customer, index) => (
+              <option key={index} value={customer.name}>
+                {customer.name}
+              </option>
+            ))}
+
         </select>
       </div>
       <h3 className="text-lg mt-4 font-semibold">Product Details</h3>
@@ -90,7 +92,7 @@ const ProductForm = ({
           name="hsn"
           onChange={onItemChange}
           className="w-full sm:w-24 p-2 border rounded"
-          // min="1"
+        // min="1"
         />
         <input
           type="number"

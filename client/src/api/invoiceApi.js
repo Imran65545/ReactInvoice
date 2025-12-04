@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_URL = import.meta.env.VITE_INVOICE_URL;
+const API_URL = import.meta.env.VITE_INVOICE_URL || "http://localhost:5000/api/invoices";
 
 export const createInvoice = async (invoiceData) => {
   const res = await axios.post(
@@ -45,7 +45,16 @@ export const getNextInvoiceNumber = async () => {
 };
 
 
-export const deleteInvoice = async (id) =>{
+export const deleteInvoice = async (id) => {
   const res = await axios.delete(`${API_URL}/delete-invoice/${id}`)
   return res.data
 }
+
+export const extractInvoiceDetails = async (formData) => {
+  const res = await axios.post(`${API_URL}/extract-from-image`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+};

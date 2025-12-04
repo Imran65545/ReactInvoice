@@ -2,6 +2,7 @@ import CustomerDetails from "./CustomerDetails";
 import ProductForm from "./ProductForm";
 import ProductTable from "./ProductTable";
 import Footer from "../components/Footer";
+import ImageUpload from "./ImageUpload";
 import { useEffect, useState } from "react";
 import { getAllCustomers } from "../api/customerApi.js";
 export default function MainForm({ invoice, setInvoice, showInvoice }) {
@@ -158,6 +159,38 @@ export default function MainForm({ invoice, setInvoice, showInvoice }) {
   return (
     <>
       <div className="w-full flex flex-col  justify-between  flex-1 ">
+        <div className="mb-4">
+          <ImageUpload onUploadSuccess={(data) => {
+            setInvoice((prev) => {
+              // Merge items
+              const newItems = data.items ? data.items.map(item => ({
+                ...item,
+                amount: item.quantity * item.price || 0
+              })) : [];
+
+              const updatedItems = [...prev.items, ...newItems];
+
+              // Calculate totals
+              const { cgst, sgst, igst, total, roundedGrandTotal, grandTotal } =
+                calculateTotal(updatedItems, prev.customerDetails);
+
+              return {
+                ...prev,
+                invoiceNumber: data.invoiceNumber || prev.invoiceNumber,
+                date: data.date || prev.date,
+                customerName: data.customerName || prev.customerName,
+                customerDetails: data.customerDetails || prev.customerDetails,
+                items: updatedItems,
+                total: total,
+                cgst: cgst,
+                sgst: sgst,
+                igst: igst,
+                roundOff: roundedGrandTotal - grandTotal,
+                grandTotal: roundedGrandTotal,
+              };
+            });
+          }} />
+        </div>
         <form className="space-y-4" onSubmit={handleAddItem}>
           <h1 className="invoice font-extrabold text-2xl sm:text-3xl tracking-wide uppercase text-center sm:text-left">
             Tax Invoice

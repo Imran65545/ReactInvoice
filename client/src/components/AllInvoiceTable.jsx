@@ -13,11 +13,12 @@ function AllInvoiceTable() {
       } catch (err) {
         console.error(
           "failed to get all the invoices : ",
-          err.response.data.message
+          err?.response?.data?.message || err.message
         );
       } finally {
         setLoading(false);
       }
+
     };
     fetchInvoiceList();
   }, []);
@@ -25,7 +26,7 @@ function AllInvoiceTable() {
   const handleDelete = async (id) => {
     const res = await deleteInvoice(id);
     // console.log("deleted item",res)
-    const filteredInvoiceList =  invoiceList.filter(item => item.invoiceNumber !== res.invoiceNumber)
+    const filteredInvoiceList = invoiceList.filter(item => item.invoiceNumber !== res.invoiceNumber)
     // console.log(filteredInvoiceList)
     setInvoiceList(filteredInvoiceList)
   };

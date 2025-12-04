@@ -9,10 +9,10 @@ const CustomerDetails = ({ customer }) => {
         <span className="font-bold">Address:</span> {customer.address}
       </p>
       <p className=" text-md">
-        <span className="font-bold ">GST Number:</span> {customer.gstNumber}
+        <span className="font-bold ">GST Number:</span> {customer.gstNumber || customer.gst}
       </p>
       <p className=" text-md">
-        <span className="font-bold ">Transport:</span> {customer.transport.length ? customer.transport[0] : "N/A"}
+        <span className="font-bold ">Transport:</span> {customer.transport && customer.transport.length ? customer.transport[0] : "N/A"}
       </p>
     </div>
   );
